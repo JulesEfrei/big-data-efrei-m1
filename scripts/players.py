@@ -9,7 +9,7 @@ def fetch_top_players(region):
     response = requests.get(url)
     
     if response.status_code == 200:
-        data = response.json()['entries']
+        data = response.json()['entries'][:min(len(response.json()['entries']), 50)]
         for player in data:
             player['region'] = region  
         return data
@@ -41,7 +41,7 @@ def collect_players_data():
     for region in REGIONS:
         print(f"Collecting players from region: {region}")
         players = fetch_top_players(region)
-        
+
         for index, player in enumerate(players):
             player['puuid'] = fetch_puuid_with_rate_limit(player['summonerId'], region)
             all_players_data.append(player)

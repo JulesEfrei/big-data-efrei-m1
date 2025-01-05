@@ -76,10 +76,10 @@ def fetch_match_details(match_id, region):
 # Function to process players and fetch matches
 def process_matches(players):
     processed_puuids = load_processed_puuids()
-    all_match_data = []
 
     for player in players:
         puuid = player['puuid']
+        player_match_data = []
         
         # Skip if player has already been processed
         if puuid in processed_puuids:
@@ -96,7 +96,7 @@ def process_matches(players):
             
             if match_data:
                 match_data['player_puuid'] = puuid
-                all_match_data.append(match_data)
+                player_match_data.append(match_data)
             
             # Sleep to respect rate limits
             time.sleep(0.2)
@@ -108,14 +108,14 @@ def process_matches(players):
         save_processed_puuids(processed_puuids)
 
         # Rate limit handling
-        if len(all_match_data) % RATE_LIMIT_CALLS == 0:
+        if len(player_match_data) % RATE_LIMIT_CALLS == 0:
             print("Pausing to respect rate limits...")
             time.sleep(RATE_LIMIT_WINDOW)
 
-        # Save match data to file (or database)
-        matches_file = OUTPUT_PATH_ROOT + 'matches.json'
-        with open(matches_file, 'a', encoding='utf-8') as f:
-            json.dump(all_match_data, f, ensure_ascii=False, indent=4)
+    # Save match data to file (or database)
+    matches_file = OUTPUT_PATH_ROOT + 'matches.json'
+    with open(matches_file, 'a', encoding='utf-8') as f:
+        json.dump(player_match_data, f, ensure_ascii=False, indent=4)
 
     print(f"Match data saved to {matches_file}")
 

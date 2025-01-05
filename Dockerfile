@@ -6,9 +6,9 @@ COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --upgrade setuptools wheel
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
-COPY . .
+COPY ./scripts/ .
 RUN rm requirements.txt
 
 FROM builder

@@ -14,10 +14,17 @@ def fetch_champions(version='latest', language='en_US'):
     
     if response.status_code == 200:
         champions_data = response.json()["data"]
-        
+
+        champions_list = []
+        for champion_name, data in champions_data.items():
+            champions_list.append({
+                "champion_name": champion_name,
+                "data": data
+            })
+
         file_path = os.path.join(OUTPUT_PATH_ROOT, 'champions.json')
         with open(file_path, 'w', encoding='utf-8') as file:
-            json.dump(champions_data, file, ensure_ascii=False, indent=4)
+            json.dump(champions_list, file, ensure_ascii=False, indent=4)
         
         print(f"Champions data fetched and saved to {file_path}.")
     else:
